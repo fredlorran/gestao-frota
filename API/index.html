@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestão de Frota</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <!-- TELA DE LOGIN -->
+  <div id="tela-login">
+    <h1><i class="fa-solid fa-user-tie icon-title"></i> Login do Gestor</h1>
+    <form id="form-login">
+      <input type="email" id="login_email" placeholder="Email" required>
+      <input type="password" id="login_senha" placeholder="Senha" required>
+      <button type="submit" class="btn-salvar"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
+      <button type="button" id="btn-cadastro"><i class="fa-solid fa-user-plus"></i> Criar nova conta</button>
+    </form>
+    <form id="form-cadastro" style="display:none;">
+      <input type="text" id="cadastro_nome" placeholder="Nome" required>
+      <input type="email" id="cadastro_email" placeholder="Email" required>
+      <input type="password" id="cadastro_senha" placeholder="Senha" required>
+      <button type="submit" class="btn-salvar"><i class="fa-solid fa-user-plus"></i> Cadastrar Gestor</button>
+      <button type="button" id="btn-voltar-login"><i class="fa-solid fa-arrow-left"></i> Voltar ao Login</button>
+    </form>
+    <div id="login-erro" style="color: red; margin-top: 8px;"></div>
+    <hr>
+  </div>
+
+  <!-- ÁREA DE GESTÃO (só aparece se logado) -->
+  <div id="area-gestao" style="display:none;">
+    <button onclick="logout()" style="float:right;"><i class="fa-solid fa-sign-out-alt"></i> Sair</button>
+    <div style="clear:both"></div>
+
+    <!-- MOTORISTAS -->
+    <h1><i class="fa-solid fa-id-card icon-title"></i> Gestão de Motoristas</h1>
+    <form id="form-motorista">
+      <input type="hidden" id="motorista_id">
+      <input type="text" id="nome" placeholder="Nome do motorista" required>
+      <input type="text" id="telefone" placeholder="Telefone">
+      <button type="submit" class="btn-salvar"><i class="fa-solid fa-check"></i> Salvar</button>
+      <button type="button" id="cancelar-edicao" style="display:none;"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-motoristas"></tbody>
+    </table>
+
+    <hr>
+
+    <!-- CARROS -->
+    <h1><i class="fa-solid fa-car icon-title"></i> Gestão de Carros</h1>
+    <label>
+      <i class="fa-solid fa-filter"></i> Filtrar por status:
+      <select id="filtro-status-carros">
+        <option value="">Todos</option>
+        <option value="disponível">Disponível</option>
+        <option value="em uso">Em uso</option>
+      </select>
+    </label>
+    <form id="form-carro">
+      <input type="hidden" id="carro_id">
+      <input type="text" id="modelo" placeholder="Modelo do carro" required>
+      <input type="text" id="placa" placeholder="Placa" required>
+      <input type="number" id="odometro" placeholder="Odômetro (opcional)">
+      <select id="status">
+        <option value="disponível">Disponível</option>
+        <option value="em uso">Em uso</option>
+      </select>
+      <button type="submit" class="btn-salvar"><i class="fa-solid fa-check"></i> Salvar</button>
+      <button type="button" id="cancelar-edicao-carro" style="display:none;"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Modelo</th>
+          <th>Placa</th>
+          <th>Odômetro</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-carros"></tbody>
+    </table>
+
+    <hr>
+
+    <!-- EVENTOS -->
+    <h1><i class="fa-solid fa-clipboard-list icon-title"></i> Gestão de Eventos (Uso/Devolução de Carro)</h1>
+    <form id="form-evento">
+      <input type="hidden" id="evento_id">
+      <select id="gestor"></select>
+      <select id="motorista"></select>
+      <select id="carro"></select>
+      <select id="tipo_evento">
+        <option value="saida">Saída (Empréstimo)</option>
+        <option value="entrada">Entrada (Devolução)</option>
+      </select>
+      <input type="number" id="evento_odometro" placeholder="Odômetro atual" required>
+      <input type="datetime-local" id="data_hora" required>
+      <button type="submit" class="btn-salvar"><i class="fa-solid fa-check"></i> Salvar Evento</button>
+      <button type="button" id="cancelar-edicao-evento" style="display:none;"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Gestor</th>
+          <th>Motorista</th>
+          <th>Carro</th>
+          <th>Tipo</th>
+          <th>Odômetro</th>
+          <th>Data/Hora</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-eventos"></tbody>
+    </table>
+
+    <hr>
+
+    <!-- RELATÓRIO -->
+    <h1><i class="fa-solid fa-chart-line icon-title"></i> Relatório de Uso por Motorista</h1>
+    <form id="form-relatorio-motorista">
+      <select id="relatorio_motorista"></select>
+      <input type="date" id="relatorio_inicio" required>
+      <input type="date" id="relatorio_fim" required>
+      <button type="submit" class="btn-editar"><i class="fa-solid fa-search"></i> Buscar</button>
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Odômetro</th>
+          <th>Data/Hora</th>
+          <th>Gestor</th>
+          <th>Carro</th>
+          <th>Placa</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-relatorio-motorista"></tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
