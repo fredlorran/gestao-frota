@@ -29,7 +29,56 @@ Funcionalidades
 
 
  Instalação e Execução
-
-1. **Clone o repositório:**
+ 
+Clone o repositório
    ```bash
    git clone https://github.com/fredlorran/gestao-frota.git
+Codigo do mysql Workbench
+
+USE gestao_frota;
+CREATE DATABASE IF NOT EXISTS gestao_frota;
+USE gestao_frota;
+-- Tabela de gestores (usuários do sistema)
+CREATE TABLE IF NOT EXISTS gestores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100)    NOT NULL,
+  email VARCHAR(100)   UNIQUE NOT NULL,
+  senha VARCHAR(255)   NOT NULL
+);
+
+-- Tabela de motoristas
+CREATE TABLE IF NOT EXISTS motoristas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100)    NOT NULL,
+  telefone VARCHAR(20)
+);
+
+-- Tabela de carros
+CREATE TABLE IF NOT EXISTS carros (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  modelo VARCHAR(100),
+  placa VARCHAR(20)    UNIQUE,
+  odometro INT         DEFAULT 0,
+  status ENUM('disponível','em uso') DEFAULT 'disponível'
+);
+
+-- Tabela de eventos de uso e devolução
+CREATE TABLE IF NOT EXISTS eventos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  gestor_id    INT    NOT NULL,
+  motorista_id INT    NOT NULL,
+  carro_id     INT    NOT NULL,
+  tipo_evento  ENUM('saida','entrada') NOT NULL,
+  odometro     INT    NOT NULL,
+  data_hora    DATETIME NOT NULL,
+  FOREIGN KEY (gestor_id)    REFERENCES gestores(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (motorista_id) REFERENCES motoristas(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (carro_id)     REFERENCES carros(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+USE gestao_frota;
+
+
+
