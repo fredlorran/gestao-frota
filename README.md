@@ -1,4 +1,11 @@
 Gestão de Frota
+Fred lorran silva da costa 1012411113
+Wallace Andrade 1012320046
+Carlos André de Sousa Barbosa 1012414775
+arthur mafra fagundes 1012314275
+Wendel Fernandes saraiva 1012314056
+Gabriel Dolglas Torres Martins 1012320568
+
 
 Sistema Web para Gestão de Frotas de Veículos (PROJETO UNIFG)
 
